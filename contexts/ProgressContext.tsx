@@ -43,7 +43,11 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     const lessonKey = `${sectionId}:${lessonId}`;
     
     // Actualizar estado local inmediatamente
-    setCompletedLessons((prev) => new Set([...prev, lessonKey]));
+    setCompletedLessons((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(lessonKey);
+      return newSet;
+    });
 
     // Guardar en el backend
     try {
