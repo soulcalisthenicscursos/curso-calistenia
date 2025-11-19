@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import redis from '@/lib/redis';
 import { getTotalLessons } from '@/data/mockData';
+import { ProgressData } from '@/types';
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Obtener progreso actual
-    const progressData = await redis.get(`progress:${userId}`);
+    const progressData = await redis.get(`progress:${userId}`) as ProgressData | null;
     let completedLessons: string[] = [];
     
     if (progressData && typeof progressData === 'object' && 'completedLessons' in progressData) {

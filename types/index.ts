@@ -31,6 +31,11 @@ export interface UserWithPassword extends User {
   createdAt: number;
 }
 
+export interface ProgressData {
+  completedLessons: string[];
+  percentage: number;
+}
+
 export interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<boolean>;

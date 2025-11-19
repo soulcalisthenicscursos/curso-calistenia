@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import redis from '@/lib/redis';
+import { ProgressData } from '@/types';
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Obtener progreso
-    const progressData = await redis.get(`progress:${userId}`);
+    const progressData = await redis.get(`progress:${userId}`) as ProgressData | null;
     
     if (!progressData) {
       return NextResponse.json({
