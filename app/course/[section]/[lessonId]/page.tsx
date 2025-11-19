@@ -22,7 +22,7 @@ export default function LessonPage() {
   // Si la sección tiene subsecciones, buscar la lección en todas las subsecciones
   let lesson;
   let subsection;
-  let sectionIdForProgress;
+  let sectionIdForProgress: string | undefined;
   
   if (section?.subsections) {
     // Buscar en qué subsección está esta lección
