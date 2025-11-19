@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import redis from '@/lib/redis';
 import { verifyPassword } from '@/lib/auth';
+import { UserWithPassword } from '@/types';
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Obtener usuario
-    const user = await redis.get(`user:${userId}`);
+    const user = await redis.get(`user:${userId}`) as UserWithPassword | null;
     if (!user || typeof user !== 'object' || !('password' in user)) {
       return NextResponse.json(
         { error: 'Email o contraseña incorrectos' },
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar contraseña
-    const isValid = await verifyPassword(password, user.password as string);
+    const isValid = await verifyPassword(password, user.password);
     if (!isValid) {
       return NextResponse.json(
         { error: 'Email o contraseña incorrectos' },

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import redis from '@/lib/redis';
+import { UserWithPassword } from '@/types';
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Obtener usuario
-    const user = await redis.get(`user:${userId}`);
+    const user = await redis.get(`user:${userId}`) as UserWithPassword | null;
     if (!user || typeof user !== 'object') {
       return NextResponse.json(
         { error: 'Usuario no encontrado' },

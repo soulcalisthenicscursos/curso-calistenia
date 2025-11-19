@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import redis from '@/lib/redis';
+import { UserWithPassword } from '@/types';
 
 // Verificar autenticación básica
 function verifyAuth(request: NextRequest): boolean {
@@ -33,20 +34,20 @@ export async function GET(request: NextRequest) {
     const users = [];
 
     for (const userId of userIds) {
-      const user = await redis.get(`user:${userId}`);
+      const user = await redis.get(`user:${userId}`) as UserWithPassword | null;
       
       if (user && typeof user === 'object' && 'email' in user) {
         // Obtener progreso del usuario
-        const progressData = await redis.get(`progress:${userId}`);
+        const progressData = await redis.get(`progress:${userId}`) as { percentage?: number } | null;
         
         let percentage = 0;
         if (progressData && typeof progressData === 'object' && 'percentage' in progressData) {
-          percentage = (progressData as any).percentage || 0;
+          percentage = progressData.percentage || 0;
         }
 
         users.push({
-          email: (user as any).email,
-          name: (user as any).name || 'Sin nombre',
+          email: user.email,
+          name: user.name || 'Sin nombre',
           percentage: percentage,
         });
       }

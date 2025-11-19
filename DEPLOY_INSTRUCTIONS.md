@@ -54,14 +54,27 @@ Si te pide autenticación, usa un Personal Access Token de GitHub.
    UPSTASH_REDIS_REST_TOKEN = (tu Token de Upstash Redis)
    ```
 
-   **Cómo obtener las credenciales de Upstash Redis:**
-   1. Ve a https://console.upstash.com/
-   2. Inicia sesión o crea una cuenta
-   3. Crea una nueva base de datos Redis (si no tienes una)
-   4. En el dashboard de tu base de datos, verás:
-      - **UPSTASH_REDIS_REST_URL**: Una URL que termina en `.upstash.io`
-      - **UPSTASH_REDIS_REST_TOKEN**: Un token largo
-   5. Copia ambos valores y pégalos en Vercel
+   **⚠️ IMPORTANTE: Cómo obtener las credenciales de Upstash Redis:**
+   
+   **NO uses las variables de Vercel KV** (KV_REST_API_URL, KV_REST_API_TOKEN, etc.). 
+   Estas son para Vercel KV, no para Upstash Redis.
+   
+   **Pasos correctos:**
+   1. Ve a https://console.upstash.com/ (NO uses el marketplace de Vercel)
+   2. Inicia sesión o crea una cuenta en Upstash
+   3. Haz clic en "Create Database" o "New Database"
+   4. Selecciona "Redis" como tipo de base de datos
+   5. Elige el plan (puedes usar el plan gratuito)
+   6. Crea la base de datos
+   7. Una vez creada, haz clic en tu base de datos para ver los detalles
+   8. En la sección "REST API" o "Details", encontrarás:
+      - **UPSTASH_REDIS_REST_URL**: Una URL que termina en `.upstash.io` (ejemplo: `https://xxxxx.upstash.io`)
+      - **UPSTASH_REDIS_REST_TOKEN**: Un token largo (empieza con `AXxxxxx...`)
+   9. Copia ambos valores EXACTAMENTE como aparecen
+   10. Ve a Vercel → Tu proyecto → Settings → Environment Variables
+   11. Agrega manualmente estas dos variables (NO uses el botón "Add" del marketplace):
+       - Key: `UPSTASH_REDIS_REST_URL` → Value: (pega la URL)
+       - Key: `UPSTASH_REDIS_REST_TOKEN` → Value: (pega el token)
 
 5. **Deploy:**
    - Haz clic en "Deploy"
@@ -84,6 +97,14 @@ Si te pide autenticación, usa un Personal Access Token de GitHub.
 
 ## Solución de problemas:
 
+- **Problema: Vercel me da variables KV_* en lugar de UPSTASH_REDIS_***
+  - **Solución:** Ignora las variables que Vercel te da automáticamente. Obtén las credenciales directamente desde https://console.upstash.com/ y agrégalas manualmente en Vercel como se explica arriba.
+  
+- **Problema: El build falla o Redis no funciona**
+  - Verifica que las variables se llamen EXACTAMENTE: `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` (con mayúsculas y guiones bajos)
+  - Verifica que los valores no tengan espacios al inicio o al final
+  - Asegúrate de que las variables estén disponibles para todos los ambientes (Production, Preview, Development)
+  
 - Si el build falla, revisa los logs en Vercel
 - Si las variables de entorno no funcionan, verifica que estén escritas exactamente como se muestra arriba
 - Si Redis no funciona, verifica que las credenciales sean correctas en Upstash
