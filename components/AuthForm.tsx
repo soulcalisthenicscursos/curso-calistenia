@@ -26,17 +26,28 @@ export default function AuthForm({ mode }: AuthFormProps) {
       let success = false;
       if (mode === 'login') {
         success = await login(email, password);
+        if (!success) {
+          // El error ya se maneja en el contexto, pero podemos mostrar un mensaje genérico
+          setError('Email o contraseña incorrectos, o tu cuenta aún no ha sido habilitada.');
+        }
       } else {
         success = await register(name, email, password);
+        if (success) {
+          setError('');
+          // Mostrar mensaje de éxito
+          alert('Cuenta creada exitosamente. Tu cuenta será habilitada por un administrador pronto.');
+          router.push('/login');
+          return;
+        } else {
+          setError('Error al registrar. Por favor, intenta nuevamente.');
+        }
       }
 
-      if (success) {
+      if (success && mode === 'login') {
         router.push('/dashboard');
-      } else {
-        setError('Error al autenticar. Por favor, intenta nuevamente.');
       }
-    } catch (err) {
-      setError('Ocurrió un error. Por favor, intenta nuevamente.');
+    } catch (err: any) {
+      setError(err.message || 'Ocurrió un error. Por favor, intenta nuevamente.');
     } finally {
       setLoading(false);
     }

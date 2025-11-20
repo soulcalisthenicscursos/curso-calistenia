@@ -64,7 +64,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (response.ok) {
         const data = await response.json();
-        setUser(data.user);
+        // No establecer usuario automáticamente - debe esperar a ser habilitado
+        // setUser(data.user);
         return true;
       } else {
         const error = await response.json();

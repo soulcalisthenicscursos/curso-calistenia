@@ -28,13 +28,14 @@ export async function POST(request: NextRequest) {
     // Generar ID único
     const userId = `user:${Date.now()}:${Math.random().toString(36).substring(7)}`;
 
-    // Guardar usuario
+    // Guardar usuario (deshabilitado por defecto hasta que el admin lo habilite)
     await redis.set(`user:${userId}`, {
       id: userId,
       name,
       email,
       password: hashedPassword,
       createdAt: Date.now(),
+      enabled: false, // Usuario deshabilitado por defecto
     });
 
     // Crear índice por email
@@ -54,24 +55,15 @@ export async function POST(request: NextRequest) {
       await redis.set('admin:users:list', usersArray);
     }
 
-    // Generar token de sesión
-    const sessionToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    await redis.set(`session:${sessionToken}`, userId, { ex: 60 * 60 * 24 * 7 }); // 7 días
-
-    const response = NextResponse.json(
-      { success: true, user: { id: userId, name, email } },
+    // NO crear sesión automática - el usuario debe esperar a ser habilitado
+    return NextResponse.json(
+      { 
+        success: true, 
+        message: 'Cuenta creada exitosamente. Tu cuenta será habilitada por un administrador pronto.',
+        user: { id: userId, name, email } 
+      },
       { status: 201 }
     );
-
-    // Establecer cookie con el token
-    response.cookies.set('session_token', sessionToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 días
-    });
-
-    return response;
   } catch (error) {
     console.error('Error en registro:', error);
     return NextResponse.json(

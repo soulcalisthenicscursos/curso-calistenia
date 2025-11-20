@@ -46,9 +46,11 @@ export async function GET(request: NextRequest) {
         }
 
         users.push({
+          id: user.id,
           email: user.email,
           name: user.name || 'Sin nombre',
           percentage: percentage,
+          enabled: user.enabled !== undefined ? user.enabled : false,
         });
       }
     }

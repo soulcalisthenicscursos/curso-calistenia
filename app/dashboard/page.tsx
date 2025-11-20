@@ -8,16 +8,19 @@ import SectionCard from '@/components/SectionCard';
 import ProgressBar from '@/components/ProgressBar';
 
 export default function DashboardPage() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/login');
+    } else if (user && user.enabled === false) {
+      // Si el usuario no está habilitado, redirigir con mensaje
+      router.push('/login?message=Tu cuenta aún no ha sido habilitada por un administrador');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, user, router]);
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || (user && user.enabled === false)) {
     return null;
   }
 

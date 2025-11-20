@@ -24,11 +24,13 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  enabled?: boolean;
 }
 
 export interface UserWithPassword extends User {
   password: string;
   createdAt: number;
+  enabled: boolean;
 }
 
 export interface ProgressData {

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import AuthForm from '@/components/AuthForm';
@@ -9,12 +9,18 @@ import AuthForm from '@/components/AuthForm';
 export default function LoginPage() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (isAuthenticated) {
       router.push('/dashboard');
     }
-  }, [isAuthenticated, router]);
+    const msg = searchParams.get('message');
+    if (msg) {
+      setMessage(msg);
+    }
+  }, [isAuthenticated, router, searchParams]);
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
@@ -30,6 +36,11 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
+        {message && (
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+            <p className="text-sm text-yellow-700">{message}</p>
+          </div>
+        )}
         <div className="bg-white py-8 px-6 shadow-2xl rounded-lg border-2" style={{ borderColor: 'rgb(22 101 52)' }}>
           <AuthForm mode="login" />
         </div>

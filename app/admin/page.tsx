@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface User {
+  id: string;
   email: string;
   name: string;
   percentage: number;
+  enabled: boolean;
 }
 
 export default function AdminPage() {
@@ -62,6 +64,33 @@ export default function AdminPage() {
       }
     } catch (err) {
       console.error('Error al cargar usuarios:', err);
+    }
+  };
+
+  const toggleUserEnabled = async (userId: string, currentEnabled: boolean) => {
+    try {
+      const credentials = btoa('admin:Admin1234');
+      const response = await fetch('/api/admin/users/enable', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${credentials}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          enabled: !currentEnabled,
+        }),
+      });
+
+      if (response.ok) {
+        // Recargar usuarios
+        await loadUsers();
+      } else {
+        alert('Error al actualizar el estado del usuario');
+      }
+    } catch (err) {
+      console.error('Error al actualizar usuario:', err);
+      alert('Error al actualizar el estado del usuario');
     }
   };
 
@@ -162,14 +191,20 @@ export default function AdminPage() {
                     Nombre
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Estado
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Progreso
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Acción
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {users.length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="px-6 py-4 text-center text-gray-500">
+                    <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
                       No hay usuarios registrados
                     </td>
                   </tr>
@@ -183,6 +218,15 @@ export default function AdminPage() {
                         {user.name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                          user.enabled 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {user.enabled ? 'Habilitado' : 'Deshabilitado'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="w-32 bg-gray-200 rounded-full h-2 mr-3">
                             <div
@@ -194,6 +238,18 @@ export default function AdminPage() {
                             {user.percentage}%
                           </span>
                         </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button
+                          onClick={() => toggleUserEnabled(user.id, user.enabled)}
+                          className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                            user.enabled
+                              ? 'bg-red-100 text-red-800 hover:bg-red-200'
+                              : 'bg-green-100 text-green-800 hover:bg-green-200'
+                          }`}
+                        >
+                          {user.enabled ? 'Deshabilitar' : 'Habilitar'}
+                        </button>
                       </td>
                     </tr>
                   ))

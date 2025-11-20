@@ -41,6 +41,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Verificar si el usuario está habilitado
+    if (!user.enabled) {
+      return NextResponse.json(
+        { error: 'Tu cuenta aún no ha sido habilitada por un administrador. Por favor, espera a que tu cuenta sea activada.' },
+        { status: 403 }
+      );
+    }
+
     // Generar token de sesión
     const sessionToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     await redis.set(`session:${sessionToken}`, userId, { ex: 60 * 60 * 24 * 7 }); // 7 días
