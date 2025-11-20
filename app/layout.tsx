@@ -13,10 +13,10 @@ export const metadata: Metadata = {
   description: 'Plataforma de aprendizaje con videos sobre alimentación, entrenamiento y mentalidad',
   icons: {
     icon: [
-      { url: '/icon.webp', type: 'image/webp' },
+      { url: '/icon-fondo.webp', type: 'image/webp' },
     ],
-    shortcut: '/icon.webp',
-    apple: '/icon.webp',
+    shortcut: '/icon-fondo.webp',
+    apple: '/icon-fondo.webp',
   },
 };
 
@@ -28,9 +28,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
-        <link rel="icon" href="/icon.webp" type="image/webp" />
-        <link rel="shortcut icon" href="/icon.webp" type="image/webp" />
-        <link rel="apple-touch-icon" href="/icon.webp" />
+        <link rel="icon" href="/icon-fondo.webp" type="image/webp" />
+        <link rel="shortcut icon" href="/icon-fondo.webp" type="image/webp" />
+        <link rel="apple-touch-icon" href="/icon-fondo.webp" />
       </head>
       <body className={inter.className}>
         <AuthProvider>
