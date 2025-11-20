@@ -38,7 +38,7 @@ export default function Header() {
                   href="/dashboard"
                   className="text-gray-700 hover:text-gray-900 transition-colors"
                 >
-                  Curso
+                  Coaching
                 </Link>
                 <button
                   onClick={logout}
@@ -125,7 +125,7 @@ export default function Header() {
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Curso
+                  Coaching
                 </Link>
                 <button
                   onClick={() => {
