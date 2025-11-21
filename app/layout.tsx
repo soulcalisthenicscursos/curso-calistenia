@@ -9,7 +9,7 @@ import Footer from '@/components/Footer';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Curso de Soul Calisthenics',
+  title: 'Coaching de Soul Calisthenics',
   description: 'Plataforma de aprendizaje con videos sobre alimentación, entrenamiento y mentalidad',
   icons: {
     icon: [
