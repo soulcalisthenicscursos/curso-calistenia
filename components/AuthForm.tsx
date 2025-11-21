@@ -25,10 +25,14 @@ export default function AuthForm({ mode }: AuthFormProps) {
     try {
       let success = false;
       if (mode === 'login') {
-        success = await login(email, password);
-        if (!success) {
-          // El error ya se maneja en el contexto, pero podemos mostrar un mensaje genérico
-          setError('Email o contraseña incorrectos, o tu cuenta aún no ha sido habilitada.');
+        // Usar el login del contexto (solo 1 llamada a la API)
+        const loginResult = await login(email, password);
+        if (loginResult.success) {
+          router.push('/dashboard');
+          return;
+        } else {
+          // Mostrar el error específico del servidor
+          setError(loginResult.error || 'Error al iniciar sesión');
         }
       } else {
         success = await register(name, email, password);

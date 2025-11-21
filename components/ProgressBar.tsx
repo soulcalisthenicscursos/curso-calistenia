@@ -1,29 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useProgress } from '@/contexts/ProgressContext';
 
 export default function ProgressBar() {
-  const { isAuthenticated } = useAuth();
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      loadProgress();
-    }
-  }, [isAuthenticated]);
-
-  const loadProgress = async () => {
-    try {
-      const response = await fetch('/api/progress/get');
-      if (response.ok) {
-        const data = await response.json();
-        setProgress(data.percentage || 0);
-      }
-    } catch (error) {
-      console.error('Error al cargar progreso:', error);
-    }
-  };
+  const { percentage } = useProgress();
+  const progress = percentage;
 
   return (
     <div className="w-full">

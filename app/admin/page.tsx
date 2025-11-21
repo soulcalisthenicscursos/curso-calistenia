@@ -19,6 +19,12 @@ export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserPassword, setNewUserPassword] = useState('');
+  const [newUserEnabled, setNewUserEnabled] = useState(true);
+  const [creatingUser, setCreatingUser] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,6 +97,49 @@ export default function AdminPage() {
     } catch (err) {
       console.error('Error al actualizar usuario:', err);
       alert('Error al actualizar el estado del usuario');
+    }
+  };
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreatingUser(true);
+    setError('');
+
+    try {
+      const credentials = btoa('admin:Admin1234');
+      const response = await fetch('/api/admin/users/create', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${credentials}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: newUserName,
+          email: newUserEmail,
+          password: newUserPassword,
+          enabled: newUserEnabled,
+        }),
+      });
+
+      if (response.ok) {
+        // Limpiar formulario
+        setNewUserName('');
+        setNewUserEmail('');
+        setNewUserPassword('');
+        setNewUserEnabled(true);
+        setShowCreateForm(false);
+        // Recargar usuarios
+        await loadUsers();
+        alert('Usuario creado exitosamente');
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Error al crear usuario');
+      }
+    } catch (err) {
+      console.error('Error al crear usuario:', err);
+      setError('Error al crear usuario');
+    } finally {
+      setCreatingUser(false);
     }
   };
 
@@ -172,6 +221,118 @@ export default function AdminPage() {
           >
             Cerrar sesión
           </button>
+        </div>
+
+        {/* Formulario para crear usuario */}
+        <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold text-gray-900">Crear Nuevo Usuario</h2>
+            <button
+              onClick={() => {
+                setShowCreateForm(!showCreateForm);
+                setError('');
+                setNewUserName('');
+                setNewUserEmail('');
+                setNewUserPassword('');
+                setNewUserEnabled(true);
+              }}
+              className="bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition-colors"
+            >
+              {showCreateForm ? 'Ocultar' : 'Crear Usuario'}
+            </button>
+          </div>
+
+          {showCreateForm && (
+            <form onSubmit={handleCreateUser} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="newUserName" className="block text-sm font-medium text-gray-700 mb-1">
+                    Nombre
+                  </label>
+                  <input
+                    id="newUserName"
+                    type="text"
+                    required
+                    value={newUserName}
+                    onChange={(e) => setNewUserName(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                    placeholder="Nombre completo"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="newUserEmail" className="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
+                  <input
+                    id="newUserEmail"
+                    type="email"
+                    required
+                    value={newUserEmail}
+                    onChange={(e) => setNewUserEmail(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                    placeholder="usuario@email.com"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="newUserPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                    Contraseña
+                  </label>
+                  <input
+                    id="newUserPassword"
+                    type="password"
+                    required
+                    minLength={6}
+                    value={newUserPassword}
+                    onChange={(e) => setNewUserPassword(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                    placeholder="Mínimo 6 caracteres"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="newUserEnabled" className="block text-sm font-medium text-gray-700 mb-1">
+                    Estado
+                  </label>
+                  <select
+                    id="newUserEnabled"
+                    value={newUserEnabled ? 'true' : 'false'}
+                    onChange={(e) => setNewUserEnabled(e.target.value === 'true')}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                  >
+                    <option value="true">Habilitado</option>
+                    <option value="false">Deshabilitado</option>
+                  </select>
+                </div>
+              </div>
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  {error}
+                </div>
+              )}
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  disabled={creatingUser}
+                  className="bg-green-800 text-white px-6 py-2 rounded-lg hover:bg-green-900 transition-colors disabled:opacity-50"
+                >
+                  {creatingUser ? 'Creando...' : 'Crear Usuario'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowCreateForm(false);
+                    setError('');
+                    setNewUserName('');
+                    setNewUserEmail('');
+                    setNewUserPassword('');
+                    setNewUserEnabled(true);
+                  }}
+                  className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          )}
         </div>
 
         <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">

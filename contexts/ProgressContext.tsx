@@ -9,6 +9,7 @@ const ProgressContext = createContext<ProgressContextType | undefined>(undefined
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
+  const [percentage, setPercentage] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           ? data.completedLessons 
           : [];
         setCompletedLessons(new Set(lessonsArray));
+        setPercentage(data.percentage || 0);
       }
     } catch (error) {
       console.error('Error al cargar progreso:', error);
@@ -59,7 +61,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({ sectionId, lessonId }),
       });
       
-      // Recargar progreso para asegurar sincronización
+      // Recargar progreso para asegurar sincronización (actualiza el porcentaje también)
       await loadProgress();
     } catch (error) {
       console.error('Error al marcar lección como completada:', error);
@@ -78,9 +80,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   };
 
   const getProgress = (): number => {
-    // El progreso se calcula en el backend, pero por ahora retornamos 0
-    // Se puede mejorar cargando el porcentaje desde el backend
-    return 0;
+    return percentage;
   };
 
   return (
@@ -90,6 +90,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         markLessonComplete,
         isLessonComplete,
         getProgress,
+        percentage,
       }}
     >
       {children}

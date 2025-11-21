@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import AuthForm from '@/components/AuthForm';
+import { getWhatsAppLink } from '@/lib/whatsapp';
 
 export default function LoginPage() {
   const { isAuthenticated } = useAuth();
@@ -30,10 +31,15 @@ export default function LoginPage() {
             Iniciar sesión
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            ¿No tienes una cuenta?{' '}
-            <Link href="/register" className="font-medium text-green-800 hover:text-green-900">
-              Regístrate aquí
-            </Link>
+            Si quieres acceder al coaching debes{' '}
+            <a
+              href={getWhatsAppLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-green-800 hover:text-green-900 underline"
+            >
+              adquirirlo aquí
+            </a>
           </p>
         </div>
         {message && (

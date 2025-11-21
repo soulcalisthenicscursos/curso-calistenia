@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { getWhatsAppLink } from '@/lib/whatsapp';
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
@@ -27,23 +28,17 @@ export default function Home() {
               href="/dashboard"
               className="inline-block bg-green-800 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-green-900 transition-colors shadow-lg"
             >
-              Ir al curso
+              Ir al coaching
             </Link>
           ) : (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/register"
-                className="inline-block bg-green-800 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-green-900 transition-colors shadow-lg"
-              >
-                Registrarme
-              </Link>
-              <Link
-                href="/login"
-                className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg border-2 border-green-800"
-              >
-                Iniciar sesión
-              </Link>
-            </div>
+            <a
+              href={getWhatsAppLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-green-800 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-green-900 transition-colors shadow-lg"
+            >
+              Quiero el Coaching
+            </a>
           )}
         </div>
       </section>

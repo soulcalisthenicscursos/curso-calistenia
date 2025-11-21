@@ -48,20 +48,12 @@ export default function Header() {
                 </button>
               </>
             ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="text-gray-700 hover:text-gray-900 transition-colors"
-                >
-                  Iniciar sesión
-                </Link>
-                <Link
-                  href="/register"
-                  className="bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition-colors"
-                >
-                  Registrarme
-                </Link>
-              </>
+              <Link
+                href="/login"
+                className="bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition-colors"
+              >
+                Iniciar sesión
+              </Link>
             )}
           </nav>
 
@@ -138,22 +130,13 @@ export default function Header() {
                 </button>
               </>
             ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Iniciar sesión
-                </Link>
-                <Link
-                  href="/register"
-                  className="block px-4 py-2 bg-green-800 text-white rounded-md hover:bg-green-900 text-center"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Registrarme
-                </Link>
-              </>
+              <Link
+                href="/login"
+                className="block px-4 py-2 bg-green-800 text-white rounded-md hover:bg-green-900 text-center"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Iniciar sesión
+              </Link>
             )}
           </div>
         </div>

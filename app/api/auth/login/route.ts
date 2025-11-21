@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     // Verificar si el usuario está habilitado
     if (!user.enabled) {
       return NextResponse.json(
-        { error: 'Tu cuenta aún no ha sido habilitada por un administrador. Por favor, espera a que tu cuenta sea activada.' },
+        { error: 'Tu cuenta está baneada' },
         { status: 403 }
       );
     }

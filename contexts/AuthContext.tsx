@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -41,14 +41,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
-        return true;
+        return { success: true };
       } else {
-        const error = await response.json();
-        throw new Error(error.error || 'Error al iniciar sesión');
+        const errorData = await response.json();
+        const errorMessage = errorData.error || 'Error al iniciar sesión';
+        return { success: false, error: errorMessage };
       }
     } catch (error) {
       console.error('Error en login:', error);
-      return false;
+      return { success: false, error: 'Error al conectar con el servidor' };
     }
   };
 

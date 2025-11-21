@@ -40,7 +40,7 @@ export interface ProgressData {
 
 export interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
@@ -51,5 +51,6 @@ export interface ProgressContextType {
   markLessonComplete: (sectionId: string, lessonId: number) => void;
   isLessonComplete: (sectionId: string, lessonId: number) => boolean;
   getProgress: () => number;
+  percentage: number;
 }
 
