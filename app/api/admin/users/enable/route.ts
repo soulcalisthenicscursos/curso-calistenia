@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import redis from '@/lib/redis';
 import { UserWithPassword } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 // Verificar autenticación básica
 function verifyAuth(request: NextRequest): boolean {
   const authHeader = request.headers.get('authorization');

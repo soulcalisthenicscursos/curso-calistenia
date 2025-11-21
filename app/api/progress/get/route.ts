@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import redis from '@/lib/redis';
 import { ProgressData } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const sessionToken = request.cookies.get('session_token')?.value;

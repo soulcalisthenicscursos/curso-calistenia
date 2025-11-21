@@ -3,6 +3,8 @@ import redis from '@/lib/redis';
 import { getTotalLessons } from '@/data/mockData';
 import { ProgressData } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const sessionToken = request.cookies.get('session_token')?.value;

@@ -3,6 +3,8 @@ import redis from '@/lib/redis';
 import { hashPassword } from '@/lib/auth';
 import { UserWithPassword } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 // Verificar autenticación básica
 function verifyAuth(request: NextRequest): boolean {
   const authHeader = request.headers.get('authorization');

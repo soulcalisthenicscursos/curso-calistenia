@@ -3,6 +3,8 @@ import redis from '@/lib/redis';
 import { verifyPassword } from '@/lib/auth';
 import { UserWithPassword } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
