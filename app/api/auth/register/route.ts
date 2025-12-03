@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import redis from '@/lib/redis';
 import { hashPassword } from '@/lib/auth';
+import { normalizeEmail } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,8 +16,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Normalizar email (minúsculas, sin acentos)
+    const normalizedEmail = normalizeEmail(email);
+
     // Verificar si el usuario ya existe
-    const existingUser = await redis.get(`user:email:${email}`);
+    const existingUser = await redis.get(`user:email:${normalizedEmail}`);
     if (existingUser) {
       return NextResponse.json(
         { error: 'El email ya está registrado' },
@@ -34,14 +38,14 @@ export async function POST(request: NextRequest) {
     await redis.set(`user:${userId}`, {
       id: userId,
       name,
-      email,
+      email: normalizedEmail, // Guardar email normalizado
       password: hashedPassword,
       createdAt: Date.now(),
       enabled: false, // Usuario deshabilitado por defecto
     });
 
-    // Crear índice por email
-    await redis.set(`user:email:${email}`, userId);
+    // Crear índice por email normalizado
+    await redis.set(`user:email:${normalizedEmail}`, userId);
 
     // Inicializar progreso vacío
     await redis.set(`progress:${userId}`, {
@@ -62,7 +66,7 @@ export async function POST(request: NextRequest) {
       { 
         success: true, 
         message: 'Cuenta creada exitosamente. Tu cuenta será habilitada por un administrador pronto.',
-        user: { id: userId, name, email } 
+        user: { id: userId, name, email: normalizedEmail } 
       },
       { status: 201 }
     );

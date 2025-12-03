@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import redis from '@/lib/redis';
 import { verifyPassword } from '@/lib/auth';
 import { UserWithPassword } from '@/types';
+import { normalizeEmail } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,8 +17,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Normalizar email (minúsculas, sin acentos)
+    const normalizedEmail = normalizeEmail(email);
+
     // Buscar usuario por email
-    const userId = await redis.get(`user:email:${email}`);
+    const userId = await redis.get(`user:email:${normalizedEmail}`);
     if (!userId) {
       return NextResponse.json(
         { error: 'Email o contraseña incorrectos' },
