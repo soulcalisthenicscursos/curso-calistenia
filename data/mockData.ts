@@ -6,30 +6,49 @@ export const mockSections: Section[] = [
     slug: 'alimentacion',
     title: 'Alimentación',
     description: 'Aprende los fundamentos de una alimentación saludable y equilibrada para mejorar tu rendimiento y bienestar.',
-    lessons: [
+    lessons: [], // Vacío porque usaremos subsections
+    subsections: [
       {
-        id: 1,
-        title: 'Introducción a la alimentación',
-        description: 'Aprende a elegir correctamente tus alimentos para el día a día y tus entrenamientos.',
-        youtubeId: '22JIEaQdRAM',
+        id: 'fundamentos',
+        title: 'Fundamentos',
+        lessons: [
+          {
+            id: 1,
+            title: 'Introducción a la alimentación',
+            description: 'Aprende a elegir correctamente tus alimentos para el día a día y tus entrenamientos.',
+            youtubeId: '22JIEaQdRAM',
+          },
+          {
+            id: 2,
+            title: 'Como calcular los macros',
+            description: 'Aprende a calcular tus requerimientos nutricionales para ajustar tu alimentación de forma precisa y alineada a tus objetivos personales.',
+            youtubeId: 'l6jIVabYIG8',
+          },
+          {
+            id: 3,
+            title: 'Aprende a organizar tus comidas',
+            description: 'Aprende a organizar tus comidas de manera estratégica según tu rutina diaria',
+            youtubeId: 'leYc2V-EEAA',
+          },
+          {
+            id: 4,
+            title: 'Aprende a cocinar',
+            description: 'Aprende a preparar un almuerzo completo paso a paso y entendé por qué elijo cada ingrediente.',
+            youtubeId: 'ZmKtR47qKGY',
+          },
+        ],
       },
       {
-        id: 2,
-        title: 'Como calcular los macros',
-        description: 'Aprende a calcular tus requerimientos nutricionales para ajustar tu alimentación de forma precisa y alineada a tus objetivos personales.',
-        youtubeId: 'l6jIVabYIG8',
-      },
-      {
-        id: 3,
-        title: 'Aprende a organizar tus comidas',
-        description: 'Aprende a organizar tus comidas de manera estratégica según tu rutina diaria',
-        youtubeId: 'leYc2V-EEAA',
-      },
-      {
-        id: 4,
-        title: 'Aprende a cocinar',
-        description: 'Aprende a preparar un almuerzo completo paso a paso y entendé por qué elijo cada ingrediente.',
-        youtubeId: 'ZmKtR47qKGY',
+        id: 'recetas',
+        title: 'Recetas',
+        lessons: [
+          {
+            id: 5,
+            title: 'Receta de Tarta de harina de avena y semillas',
+            description: 'En esta clase te enseño a hacer una tarta de harina de avena y semillas, rellena de pollo, champiñón y verduras',
+            youtubeId: 'DXENBLxKFNw',
+          },
+        ],
       },
     ],
   },
