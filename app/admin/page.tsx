@@ -25,6 +25,11 @@ export default function AdminPage() {
   const [newUserPassword, setNewUserPassword] = useState('');
   const [newUserEnabled, setNewUserEnabled] = useState(true);
   const [creatingUser, setCreatingUser] = useState(false);
+  const [editingUser, setEditingUser] = useState<string | null>(null);
+  const [editUserName, setEditUserName] = useState('');
+  const [editUserEmail, setEditUserEmail] = useState('');
+  const [editUserPassword, setEditUserPassword] = useState('');
+  const [updatingUser, setUpdatingUser] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,6 +145,61 @@ export default function AdminPage() {
       setError('Error al crear usuario');
     } finally {
       setCreatingUser(false);
+    }
+  };
+
+  const handleEditUser = (user: User) => {
+    setEditingUser(user.id);
+    setEditUserName(user.name);
+    setEditUserEmail(user.email);
+    setEditUserPassword('');
+    setError('');
+  };
+
+  const handleUpdateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser) return;
+
+    setUpdatingUser(true);
+    setError('');
+
+    try {
+      const credentials = btoa('admin:Admin1234');
+      const updateData: { userId: string; name?: string; email?: string; password?: string } = {
+        userId: editingUser,
+      };
+
+      if (editUserName) updateData.name = editUserName;
+      if (editUserEmail) updateData.email = editUserEmail;
+      if (editUserPassword) updateData.password = editUserPassword;
+
+      const response = await fetch('/api/admin/users/update', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${credentials}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateData),
+      });
+
+      if (response.ok) {
+        // Limpiar formulario
+        setEditingUser(null);
+        setEditUserName('');
+        setEditUserEmail('');
+        setEditUserPassword('');
+        // Recargar usuarios
+        await loadUsers();
+        alert('Usuario actualizado exitosamente');
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Error al actualizar usuario');
+      }
+    } catch (err) {
+      console.error('Error al actualizar usuario:', err);
+      setError('Error al actualizar usuario');
+    } finally {
+      setUpdatingUser(false);
     }
   };
 
@@ -358,7 +418,7 @@ export default function AdminPage() {
                     Progreso
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Acción
+                    Acciones
                   </th>
                 </tr>
               </thead>
@@ -401,16 +461,24 @@ export default function AdminPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <button
-                          onClick={() => toggleUserEnabled(user.id, user.enabled)}
-                          className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                            user.enabled
-                              ? 'bg-red-100 text-red-800 hover:bg-red-200'
-                              : 'bg-green-100 text-green-800 hover:bg-green-200'
-                          }`}
-                        >
-                          {user.enabled ? 'Deshabilitar' : 'Habilitar'}
-                        </button>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEditUser(user)}
+                            className="px-4 py-2 text-sm font-medium rounded-lg transition-colors bg-blue-100 text-blue-800 hover:bg-blue-200"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => toggleUserEnabled(user.id, user.enabled)}
+                            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                              user.enabled
+                                ? 'bg-red-100 text-red-800 hover:bg-red-200'
+                                : 'bg-green-100 text-green-800 hover:bg-green-200'
+                            }`}
+                          >
+                            {user.enabled ? 'Deshabilitar' : 'Habilitar'}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -419,6 +487,91 @@ export default function AdminPage() {
             </table>
           </div>
         </div>
+
+        {/* Modal de edición de usuario */}
+        {editingUser && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Editar Usuario</h2>
+              
+              <form onSubmit={handleUpdateUser} className="space-y-4">
+                <div>
+                  <label htmlFor="editUserName" className="block text-sm font-medium text-gray-700 mb-1">
+                    Nombre
+                  </label>
+                  <input
+                    id="editUserName"
+                    type="text"
+                    required
+                    value={editUserName}
+                    onChange={(e) => setEditUserName(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                    placeholder="Nombre completo"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="editUserEmail" className="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
+                  <input
+                    id="editUserEmail"
+                    type="email"
+                    required
+                    value={editUserEmail}
+                    onChange={(e) => setEditUserEmail(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                    placeholder="usuario@email.com"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="editUserPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                    Nueva Contraseña (dejar vacío para no cambiar)
+                  </label>
+                  <input
+                    id="editUserPassword"
+                    type="password"
+                    minLength={6}
+                    value={editUserPassword}
+                    onChange={(e) => setEditUserPassword(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                    placeholder="Mínimo 6 caracteres"
+                  />
+                </div>
+
+                {error && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
+
+                <div className="flex gap-4">
+                  <button
+                    type="submit"
+                    disabled={updatingUser}
+                    className="flex-1 bg-green-800 text-white px-6 py-2 rounded-lg hover:bg-green-900 transition-colors disabled:opacity-50"
+                  >
+                    {updatingUser ? 'Actualizando...' : 'Actualizar Usuario'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingUser(null);
+                      setEditUserName('');
+                      setEditUserEmail('');
+                      setEditUserPassword('');
+                      setError('');
+                    }}
+                    className="flex-1 bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
