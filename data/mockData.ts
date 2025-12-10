@@ -48,6 +48,18 @@ export const mockSections: Section[] = [
             description: 'En esta clase te enseño a hacer una tarta de harina de avena y semillas, rellena de pollo, champiñón y verduras',
             youtubeId: 'DXENBLxKFNw',
           },
+          {
+            id: 6,
+            title: 'Receta de Sandwich de pan de avena',
+            description: 'En esta clase te enseño a hacer un Sandwich de pan de avena ideal para desayunar o merendar!',
+            youtubeId: 'IpdZNfIyH0M',
+          },
+          {
+            id: 7,
+            title: 'Receta de Pancakes saludables',
+            description: 'En esta clase te enseño a hacer un Pancake saludable',
+            youtubeId: 'YRCBdnMLTMc',
+          },
         ],
       },
     ],
