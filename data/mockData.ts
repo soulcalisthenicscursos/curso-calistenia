@@ -60,6 +60,12 @@ export const mockSections: Section[] = [
             description: 'En esta clase te enseño a hacer un Pancake saludable',
             youtubeId: 'YRCBdnMLTMc',
           },
+          {
+            id: 8,
+            title: 'Receta de Hamburguesa Fit',
+            description: 'En este video te enseño a hacer una hamburguesa fit',
+            youtubeId: 'qqFNFpPdu-Y',
+          },
         ],
       },
     ],
