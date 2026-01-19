@@ -66,6 +66,18 @@ export const mockSections: Section[] = [
             description: 'En este video te enseño a hacer una hamburguesa fit',
             youtubeId: 'qqFNFpPdu-Y',
           },
+          {
+            id: 9,
+            title: 'Receta de Barrita de yogurt y cereal',
+            description: 'En esta clase te enseño a hacer una Barrita de yogurt y cereal!',
+            youtubeId: 'u51Y1lFQr6g',
+          },
+          {
+            id: 10,
+            title: 'Receta de Wraps de pollo',
+            description: 'En esta clase te enseño a hacer Wraps de pollo',
+            youtubeId: '3WMotlkp09M',
+          },
         ],
       },
     ],
