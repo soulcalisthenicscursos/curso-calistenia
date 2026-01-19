@@ -147,6 +147,12 @@ export const mockSections: Section[] = [
             description: 'En esta clase pueden ver una rutina para fortalecer la musculatura involucrada en el movimiento de VERTICAL, favorecer la propiocepcion del movimiento y como consecuencia aumentar los segundos de este patrón de movimiento específico.',
             youtubeId: 'RCDEbWvPz34',
           },
+          {
+            id: 9,
+            title: 'Rutina de Calistenia 2',
+            description: 'En esta clase pueden ver una rutina de calistenia',
+            youtubeId: '-p2dLEV9bzQ',
+          },
         ],
       },
     ],
