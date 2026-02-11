@@ -78,6 +78,24 @@ export const mockSections: Section[] = [
             description: 'En esta clase te enseño a hacer Wraps de pollo',
             youtubeId: '3WMotlkp09M',
           },
+          {
+            id: 11,
+            title: 'Receta de Wrap de pollo',
+            description: 'En este video te enseño a hacer un Wrap de pollo',
+            youtubeId: 'qqYxnDE_mCY',
+          },
+          {
+            id: 12,
+            title: 'Receta de Zapallitos rellenos',
+            description: 'En esta clase te enseño a hacer zapallitos rellenos ideal para almuerzo o cena',
+            youtubeId: 'ZiDA0p6mVY8',
+          },
+          {
+            id: 13,
+            title: 'Receta de Pancakes de limon y arandanos',
+            description: 'En este video te enseño a hacer Pancakes de limon y arandanos ideal para desayuno o merienda',
+            youtubeId: 'Vuflj2tbPyo',
+          },
         ],
       },
     ],
@@ -97,7 +115,7 @@ export const mockSections: Section[] = [
             id: 1,
             title: 'Como entrar en calor',
             description: 'Aprende a entrar en calor correctamente antes de tus entrenamientos para prevenir lesiones y optimizar tu rendimiento.',
-            youtubeId: 'LPYyMdYKcgc',
+            youtubeId: 'yYFlOP1eVBk',
           },
           {
             id: 2,
