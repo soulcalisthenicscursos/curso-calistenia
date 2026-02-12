@@ -80,8 +80,8 @@ export const mockSections: Section[] = [
           },
           {
             id: 11,
-            title: 'Receta de Wrap de pollo',
-            description: 'En este video te enseño a hacer un Wrap de pollo',
+            title: 'Receta de Wraps de pollo 2',
+            description: 'En este video te enseño otra receta para hacer Wraps de pollo',
             youtubeId: 'qqYxnDE_mCY',
           },
           {
