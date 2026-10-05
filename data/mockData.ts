@@ -115,13 +115,13 @@ export const mockSections: Section[] = [
             id: 1,
             title: 'Como entrar en calor',
             description: 'Aprende a entrar en calor correctamente antes de tus entrenamientos para prevenir lesiones y optimizar tu rendimiento.',
-            youtubeId: 'yYFlOP1eVBk',
+youtubeId: 'AvQ4r5Yqy_c',
           },
           {
             id: 2,
             title: 'Ejercicios basicos de Calistenia',
             description: 'En esta clase pueden ver la técnica de los ejercicios BÁSICOS de calistenia para que puedan aplicarlos correctamente junto con sus planificaciones.',
-            youtubeId: 'vQZmiIhDcPg',
+            youtubeId: 'mjCYi_jFPTk',
           },
           {
             id: 3,

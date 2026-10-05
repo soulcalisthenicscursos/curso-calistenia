@@ -64,7 +64,10 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error al obtener usuarios:', error);
     return NextResponse.json(
-      { error: 'Error al obtener usuarios' },
+      {
+        error:
+          'No se pudo conectar con la base de datos (Redis/Upstash). Revisa UPSTASH_REDIS_REST_URL y UPSTASH_REDIS_REST_TOKEN en .env.',
+      },
       { status: 500 }
     );
   }

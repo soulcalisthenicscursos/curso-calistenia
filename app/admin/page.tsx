@@ -31,27 +31,36 @@ export default function AdminPage() {
   const [editUserPassword, setEditUserPassword] = useState('');
   const [updatingUser, setUpdatingUser] = useState(false);
 
+  const adminAuthHeaders = (): HeadersInit => ({
+    Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+  });
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      // Crear credenciales en base64
-      const credentials = btoa(`${username}:${password}`);
-      
       const response = await fetch('/api/admin/users', {
-        headers: {
-          'Authorization': `Basic ${credentials}`,
-        },
+        headers: adminAuthHeaders(),
       });
 
       if (response.ok) {
         const data = await response.json();
         setIsAuthenticated(true);
         setUsers(data.users);
-      } else {
+      } else if (response.status === 401) {
         setError('Usuario o contraseña incorrectos');
+      } else {
+        let message =
+          'Error del servidor al cargar usuarios. Suele deberse a Redis (Upstash) mal configurado o inaccesible.';
+        try {
+          const data = await response.json();
+          if (data?.error) message = data.error;
+        } catch {
+          /* cuerpo no JSON */
+        }
+        setError(message);
       }
     } catch (err) {
       setError('Error al iniciar sesión');
@@ -62,11 +71,8 @@ export default function AdminPage() {
 
   const loadUsers = async () => {
     try {
-      const credentials = btoa('admin:Admin1234');
       const response = await fetch('/api/admin/users', {
-        headers: {
-          'Authorization': `Basic ${credentials}`,
-        },
+        headers: adminAuthHeaders(),
       });
 
       if (response.ok) {
@@ -80,11 +86,10 @@ export default function AdminPage() {
 
   const toggleUserEnabled = async (userId: string, currentEnabled: boolean) => {
     try {
-      const credentials = btoa('admin:Admin1234');
       const response = await fetch('/api/admin/users/enable', {
         method: 'POST',
         headers: {
-          'Authorization': `Basic ${credentials}`,
+          ...adminAuthHeaders(),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -111,11 +116,10 @@ export default function AdminPage() {
     setError('');
 
     try {
-      const credentials = btoa('admin:Admin1234');
       const response = await fetch('/api/admin/users/create', {
         method: 'POST',
         headers: {
-          'Authorization': `Basic ${credentials}`,
+          ...adminAuthHeaders(),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -164,7 +168,6 @@ export default function AdminPage() {
     setError('');
 
     try {
-      const credentials = btoa('admin:Admin1234');
       const updateData: { userId: string; name?: string; email?: string; password?: string } = {
         userId: editingUser,
       };
@@ -176,7 +179,7 @@ export default function AdminPage() {
       const response = await fetch('/api/admin/users/update', {
         method: 'POST',
         headers: {
-          'Authorization': `Basic ${credentials}`,
+          ...adminAuthHeaders(),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updateData),
