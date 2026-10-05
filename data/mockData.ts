@@ -115,7 +115,7 @@ export const mockSections: Section[] = [
             id: 1,
             title: 'Como entrar en calor',
             description: 'Aprende a entrar en calor correctamente antes de tus entrenamientos para prevenir lesiones y optimizar tu rendimiento.',
-youtubeId: 'AvQ4r5Yqy_c',
+            youtubeId: 'AvQ4r5Yqy_c',
           },
           {
             id: 2,
